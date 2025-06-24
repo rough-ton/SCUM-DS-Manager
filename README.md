@@ -48,8 +48,9 @@
 
 ## Roadmap
 
-- [ ] Server config manager UI
 - [ ] Server launch controls and auto-restart options
+- [ ] Server config manager UI
+- [ ] Network port validation
 - [ ] Backup and restore functionality
 
 ---
