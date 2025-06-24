@@ -59,7 +59,7 @@
 ## 🖥️ How to Run
 
 > **Requirements:**  
-> - Windows Server or Windows 10/11 (64-bit)  
+> - Windows Server (64-bit)  
 > - PowerShell 5.1+  
 > - Administrator privileges
 
@@ -73,7 +73,7 @@
    .\scum-ds-manager.ps1
    ```
 
-3. The GUI will launch automatically. The script will relaunch itself in a hidden PowerShell window if needed.
+3. The GUI will launch automatically.
 
 > ⚠️ Note: You may need to unblock the script before running:
 >
