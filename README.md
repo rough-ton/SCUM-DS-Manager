@@ -21,7 +21,7 @@
 - Validates minimum specs (8 GB RAM, 50 GB free disk space, Windows Server x64)
 - Visual feedback with green checkmarks or red flags
 - Includes warnings for unsupported OS environments
-![image](https://github.com/user-attachments/assets/c67e6597-d564-4fbb-90bb-9dfd8fa22f17)
+![image](https://github.com/user-attachments/assets/30eced64-55d2-4a34-9052-a7015c95891a)
 
 ### 📦 SCUM Server Setup
 - Guided installer for:
@@ -31,7 +31,7 @@
   - SCUM Dedicated Server (via SteamCMD script)
 - Handles downloads, silent installs, and path validation
 - Install/uninstall support where applicable
-![image](https://github.com/user-attachments/assets/0aae4727-f772-45cc-924d-67e7568b8423)
+![image](https://github.com/user-attachments/assets/f6edc713-4073-428d-b10e-a7ef7e46a746)
 
 ### 🔒 Fully Offline, Transparent & Self-Contained
 - No telemetry. No webhooks. No funny business
