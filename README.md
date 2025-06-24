@@ -46,6 +46,33 @@
 
 ---
 
+## 🖥️ How to Run
+
+> **Requirements:**  
+> - Windows Server or Windows 10/11 (64-bit)  
+> - PowerShell 5.1+  
+> - Administrator privileges
+
+### Run from PowerShell
+
+1. **Download** the `scum-ds-manager.ps1` script from this repository.
+2. **Right-click** the file and select **Run with PowerShell**, or open PowerShell and run:
+
+   ```powershell
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   .\scum-ds-manager.ps1
+   ```
+
+3. The GUI will launch automatically. The script will relaunch itself in a hidden PowerShell window if needed.
+
+> ⚠️ Note: You may need to unblock the script before running:
+>
+> ```powershell
+> Unblock-File -Path .\scum-ds-manager.ps1
+> ```
+
+---
+
 ## Roadmap
 
 - [ ] Server launch controls and auto-restart options
