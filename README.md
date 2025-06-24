@@ -21,8 +21,7 @@
 - Validates minimum specs (8 GB RAM, 50 GB free disk space, Windows Server x64)
 - Visual feedback with green checkmarks or red flags
 - Includes warnings for unsupported OS environments
-
-  ![image](https://github.com/user-attachments/assets/c67e6597-d564-4fbb-90bb-9dfd8fa22f17)
+![image](https://github.com/user-attachments/assets/c67e6597-d564-4fbb-90bb-9dfd8fa22f17)
 
 ### 📦 SCUM Server Setup
 - Guided installer for:
@@ -32,24 +31,7 @@
   - SCUM Dedicated Server (via SteamCMD script)
 - Handles downloads, silent installs, and path validation
 - Install/uninstall support where applicable
-
-### 🧪 One-Click Dependency Checks
-- “Run Checks” button verifies all required software is present
-- Enables/disables relevant buttons based on detected status
-- Log output captures results in real-time
-
-### 📁 Folder Selection UI
-- Users can choose custom install locations for SteamCMD and SCUM server
-- Path validation and confirmation prompts included
-
-### 🪵 Expandable Log Output
-- Built-in logging console shows install actions, output, and errors
-- Toggle visibility with an expandable panel
-
-### ⚠️ Built-In Warnings and Disclaimers
-- DirectX uninstall limitations explained in-app
-- Permanent delete warnings for uninstall actions
-- Humorous but clear disclaimer: use at your own risk
+![image](https://github.com/user-attachments/assets/0aae4727-f772-45cc-924d-67e7568b8423)
 
 ### 🔒 Fully Offline, Transparent & Self-Contained
 - No telemetry. No webhooks. No funny business
