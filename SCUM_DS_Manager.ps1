@@ -108,7 +108,8 @@ $xamlString = @"
                                     <Button Name="SCUMInstallBtn" Content="Install" Width="130" Margin="5,0" IsEnabled="False"/>
                                     <Button Name="SCUMUninstallBtn" Content="Uninstall" Width="100" Margin="5,0" IsEnabled="False"/>
                                 </StackPanel>
-
+                                <TextBlock TextWrapping="Wrap" Margin="5,2,5,10" FontSize="12" Foreground="DarkGray"
+                                        Text="SCUM Server Files install button is locked until SteamCMD is detected. Please install SteamCMD first." />
                                 <StackPanel Name="SCUMPathPanel" Orientation="Horizontal" Margin="0,5,0,0" Visibility="Collapsed">
                                     <TextBlock Text="Install Path:" Width="90" VerticalAlignment="Center"/>
                                     <TextBox Name="SCUMPathBox" Text="C:\ScumServer" Width="400" Margin="5,0"/>
@@ -116,8 +117,21 @@ $xamlString = @"
                                 </StackPanel>
                             </StackPanel>
 
-                            <TextBlock TextWrapping="Wrap" Margin="5,2,5,10" FontSize="12" Foreground="DarkGray"
-                                    Text="SCUM Server Files install button is locked until SteamCMD is detected. Please install SteamCMD first." />
+                            <!-- Port input + action buttons -->
+                            <StackPanel Margin="0,10,0,0">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <TextBlock Text="Server Port:" Width="100" VerticalAlignment="Center"/>
+                                    <TextBox Name="SCUMPortBox" Width="100" Text="7777"/>
+                                </StackPanel>
+
+                                <Button Name="CreateBatchBtn" Content="📝 Create startserver.bat" Width="250" Height="30" Margin="0,5"/>
+                                <Button Name="CreateTaskBtn" Content="🛠️ Create Auto-Start Scheduled Task" Width="250" Height="30" Margin="0,5"/>
+                                <Button Name="StartSCUMServerBtn" Content="▶️ Start SCUM Server" Width="250" Height="30" Margin="0,5">
+                                    <Button.Background>
+                                        <SolidColorBrush Color="LightGreen"/>
+                                    </Button.Background>
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
 
@@ -137,13 +151,11 @@ $xamlString = @"
                                     Text="Disclaimer: This tool (and the scripts within) is provided as-is, with zero warranty, guarantees, or promises. If it breaks something, deletes your stuff, or summons a tech demon, that’s on you." />
                         </Border>
                     </StackPanel>
-
                 </Grid>
             </TabItem>
 
-
             <!-- Server Config Tab -->
-            <TabItem Header="Server Config">
+            <TabItem Header="SCUM Server Settings">
                 <TextBlock TextWrapping="Wrap" Margin="10" FontSize="13" Text="Coming soon! SCUM Server config manager." />
             </TabItem>
 
@@ -263,8 +275,13 @@ $SCUMUninstallBtn = $window.FindName("SCUMUninstallBtn")
 $SCUMPathPanel = $window.FindName("SCUMPathPanel")
 $SCUMPathBox = $window.FindName("SCUMPathBox")
 $BrowseSCUMPathBtn = $window.FindName("BrowseSCUMPathBtn")
+$CreateBatchBtn = $window.FindName("CreateBatchBtn")
+$CreateTaskBtn = $window.FindName("CreateTaskBtn")
+$StartSCUMServerBtn = $window.FindName("StartSCUMServerBtn")
 
 $RunAllChecksBtn = $window.FindName("RunAllChecksBtn")
+$RunAllChecksBtn.Visibility = "Collapsed"
+
 $OutputLog = $window.FindName("OutputLog")
 
 $ChecksAlreadyRan = $false
@@ -336,10 +353,10 @@ function Start-AndLogProcess {
 
     $exitCode = $process.ExitCode
     if ($exitCode -eq 0) {
-        Write-Log "Process completed successfully."
+        Write-Log "✅ Process completed successfully."
     }
     else {
-        Write-Log "Process exited with code $exitCode."
+        Write-Log "⚠️ Process exited with code $exitCode."
     }
 
     return $exitCode
@@ -446,12 +463,12 @@ function Check-VCRedist {
     if ($vc) {
         $VCStatus.Text = "Installed"
         $VCStatus.Foreground = [System.Windows.Media.Brushes]::Green
-        if (-not $Silent) { Write-Log "Visual C++ Redistributable is installed." }
+        if (-not $Silent) { Write-Log "✅ Visual C++ Redistributable is installed." }
     }
     else {
         $VCStatus.Text = "Not Installed"
         $VCStatus.Foreground = [System.Windows.Media.Brushes]::Red
-        if (-not $Silent) { Write-Log "Visual C++ Redistributable is not installed." }
+        if (-not $Silent) { Write-Log "⚠️ Visual C++ Redistributable is not installed." }
     }
 }
 
@@ -462,10 +479,10 @@ $VCInstallBtn.Add_Click({
 
         try {
             Start-Process -NoNewWindow -Wait -FilePath "winget" -ArgumentList 'install --id Microsoft.VCRedist.2015+.x64 --silent --accept-package-agreements --accept-source-agreements'
-            Write-Log "Visual C++ Redistributable installation completed."
+            Write-Log "✅ Visual C++ Redistributable installation completed."
         }
         catch {
-            Write-Log "Visual C++ install failed: $_"
+            Write-Log "⚠️ Visual C++ install failed: $_"
         }
 
         Check-VCRedist
@@ -506,21 +523,21 @@ $VCUninstallBtn.Add_Click({
                         try {
                             Write-Log "Running uninstall command: $exe $args"
                             Start-Process -FilePath $exe -ArgumentList $args -Wait -NoNewWindow
-                            Write-Log "Uninstall completed."
+                            Write-Log "❌ Uninstall completed."
                         }
                         catch {
-                            Write-Log "Uninstall failed: $_"
+                            Write-Log "⚠️ Uninstall failed: $_"
                         }
                     }
                     else {
-                        Write-Log "No uninstall command found for $($props.DisplayName)"
+                        Write-Log "⚠️ No uninstall command found for $($props.DisplayName)"
                     }
                 }
             }
         }
 
         if (-not $found) {
-            Write-Log "No matching Visual C++ Redistributable found in registry."
+            Write-Log "⚠️ No matching Visual C++ Redistributable found in registry."
         }
 
         # Refresh the status
@@ -552,7 +569,7 @@ function Check-DirectX {
     if ($dllFound) {
         $DXStatus.Text = "Installed"
         $DXStatus.Foreground = [System.Windows.Media.Brushes]::Green
-        if (-not $Silent) { Write-Log "DirectX runtime DLLs detected." }
+        if (-not $Silent) { Write-Log "✅ DirectX runtime DLLs detected." }
         return
     }
 
@@ -566,10 +583,10 @@ function Check-DirectX {
     if (Test-Path $dxKeyPath) {
         try {
             $dxVersion = (Get-ItemProperty -Path $dxKeyPath).Version
-            if (-not $Silent) { Write-Log "DirectX version reported in registry: $dxVersion" }
+            if (-not $Silent) { Write-Log "✅ DirectX version reported in registry: $dxVersion" }
         }
         catch {
-            if (-not $Silent) { Write-Log "Failed to read DirectX version from registry." }
+            if (-not $Silent) { Write-Log "⚠️ Failed to read DirectX version from registry." }
         }
     }
 
@@ -577,24 +594,24 @@ function Check-DirectX {
         try {
             $lastSetupDate = (Get-ItemProperty -Path $dxSetupLogPath).InstalledVersion
             if ($lastSetupDate) {
-                if (-not $Silent) { Write-Log "DirectX Setup InstalledVersion: $lastSetupDate" }
+                if (-not $Silent) { Write-Log "✅ DirectX Setup InstalledVersion: $lastSetupDate" }
                 $dxInstalled = $true
             }
         }
         catch {
-            if (-not $Silent) { Write-Log "DirectX Setup registry fallback not found." }
+            if (-not $Silent) { Write-Log "⚠️ DirectX Setup registry fallback not found." }
         }
     }
 
     if ($dxInstalled -or $dxVersion -like "4.09.*") {
         $DXStatus.Text = "Installed"
         $DXStatus.Foreground = [System.Windows.Media.Brushes]::Green
-        if (-not $Silent) { Write-Log "DirectX runtime likely installed based on registry." }
+        if (-not $Silent) { Write-Log "✅ DirectX runtime likely installed based on registry." }
     }
     else {
         $DXStatus.Text = "Not Installed"
         $DXStatus.Foreground = [System.Windows.Media.Brushes]::Red
-        if (-not $Silent) { Write-Log "No DirectX runtime indicators found." }
+        if (-not $Silent) { Write-Log "⚠️ No DirectX runtime indicators found." }
     }
 }
 
@@ -616,10 +633,10 @@ $DXInstallBtn.Add_Click({
             Write-Log "Running DXSETUP.exe silently..."
             Start-Process -FilePath "$extractPath\DXSETUP.exe" -ArgumentList "/silent" -Wait -NoNewWindow
 
-            Write-Log "DirectX installation completed."
+            Write-Log "✅ DirectX installation completed."
         }
         catch {
-            Write-Log "DirectX installation failed: $_"
+            Write-Log "⚠️ DirectX installation failed: $_"
         }
         finally {
             # Clean up installer files
@@ -634,7 +651,7 @@ $DXInstallBtn.Add_Click({
 
 # DirectX Uninstall Button
 $DXUninstallBtn.Add_Click({
-        Write-Log "DirectX End-User Runtimes cannot be uninstalled via this script."
+        Write-Log "⚠️ DirectX End-User Runtimes cannot be uninstalled via this script."
         Write-Log "They are installed as system components in (System32) and must be manually removed if needed."
         $DXStatus.Text = "Manual Uninstall Required"
     })
@@ -655,13 +672,13 @@ function Check-SteamCMD {
     if ($found) {
         $SteamCMDStatus.Text = "Installed"
         $SteamCMDStatus.Foreground = [System.Windows.Media.Brushes]::Green
-        if (-not $Silent) { Write-Log "SteamCMD is installed." }
+        if (-not $Silent) { Write-Log "✅ SteamCMD is installed." }
         return $true
     }
     else {
         $SteamCMDStatus.Text = "Not Installed"
         $SteamCMDStatus.Foreground = [System.Windows.Media.Brushes]::Red
-        if (-not $Silent) { Write-Log "SteamCMD is not installed." }
+        if (-not $Silent) { Write-Log "⚠️ SteamCMD is not installed." }
         return $false
     }
 }
@@ -699,7 +716,7 @@ $SteamCMDInstallBtn.Add_Click({
             Check-SteamCMD
         }
         catch {
-            Write-Log "Failed to install SteamCMD: $_"
+            Write-Log "⚠️ Failed to install SteamCMD: $_"
         }
 
         # Reset UI
@@ -718,7 +735,7 @@ $SteamCMDUninstallBtn.Add_Click({
         }
 
         if (-not (Test-Path $steamPath)) {
-            Write-Log "SteamCMD directory not found at: $steamPath"
+            Write-Log "⚠️ SteamCMD directory not found at: $steamPath"
             return
         }
 
@@ -737,14 +754,14 @@ $SteamCMDUninstallBtn.Add_Click({
         try {
             Write-Log "Uninstalling SteamCMD from: $steamPath"
             Remove-Item -Path $steamPath -Recurse -Force
-            Write-Log "SteamCMD files removed successfully."
+            Write-Log "❌ SteamCMD files removed successfully."
 
             # Optional: clear out the text box if uninstalled
             $SteamCMDPathBox.Text = ""
 
         }
         catch {
-            Write-Log "Failed to uninstall SteamCMD: $_"
+            Write-Log "⚠️ Failed to uninstall SteamCMD: $_"
         }
 
         Check-SteamCMD
@@ -791,19 +808,19 @@ function Check-SCUM {
     if (Test-Path $nestedPath) {
         $SCUMInstallStatus.Text = "Installed"
         $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Green
-        if (-not $Silent) { Write-Log "SCUM server detected at: $nestedPath" }
+        if (-not $Silent) { Write-Log "✅ SCUM server detected at: $nestedPath" }
         return $true
     }
     elseif (Test-Path $directPath) {
         $SCUMInstallStatus.Text = "Installed"
         $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Green
-        if (-not $Silent) { Write-Log "SCUM server detected at: $directPath" }
+        if (-not $Silent) { Write-Log "✅ SCUM server detected at: $directPath" }
         return $true
     }
     else {
         $SCUMInstallStatus.Text = "Not Installed"
         $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Red
-        if (-not $Silent) { Write-Log "SCUMServer.exe not found at either expected location." }
+        if (-not $Silent) { Write-Log "⚠️ SCUMServer.exe not found at either expected location." }
         return $false
     }
 }
@@ -821,7 +838,7 @@ $SCUMInstallBtn.Add_Click({
         $steamcmdPath = "C:\SteamCMD\steamcmd.exe"
 
         if (-not (Test-Path $steamcmdPath)) {
-            Write-Log "SteamCMD is not installed at expected path: $steamcmdPath"
+            Write-Log "⚠️ SteamCMD is not installed at expected path: $steamcmdPath"
             return
         }
 
@@ -833,58 +850,79 @@ app_update 3792580 validate
 quit
 "@ | Out-File -Encoding ASCII -FilePath $scriptPath
 
-        $stdoutPath = "$env:TEMP\scum_stdout.txt"
-        $stderrPath = "$env:TEMP\scum_stderr.txt"
+        # Show status immediately
+        $SCUMInstallStatus.Text = "Installing..."
+        $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Orange
+        Write-Log "Starting SCUM server install. This may take a few minutes depending on your internet speed and Steam's download servers. Sometimes this window may go into a 'Not Responding' state. Please be patient."
+        Write-Log "Launching SteamCMD to install SCUM server files..."
 
-        try {
-            Write-Log "Launching SteamCMD to install SCUM server files..."
+        # Start async install
+        $ps = [powershell]::Create()
+        $ps.Runspace = [runspacefactory]::CreateRunspace()
+        $ps.Runspace.ApartmentState = "STA"
+        $ps.Runspace.ThreadOptions = "ReuseThread"
+        $ps.Runspace.Open()
 
-            $processInfo = New-Object System.Diagnostics.ProcessStartInfo
-            $processInfo.FileName = $steamcmdPath
-            $processInfo.Arguments = "+runscript `"$scriptPath`""
-            $processInfo.UseShellExecute = $false
-            $processInfo.RedirectStandardOutput = $true
-            $processInfo.RedirectStandardError = $true
-            $processInfo.CreateNoWindow = $true
+        $ps.AddScript({
+                param ($scriptPath, $steamcmdPath, $SCUMInstallStatus)
 
-            $process = New-Object System.Diagnostics.Process
-            $process.StartInfo = $processInfo
-            $process.Start() | Out-Null
+                $processInfo = New-Object System.Diagnostics.ProcessStartInfo
+                $processInfo.FileName = $steamcmdPath
+                $processInfo.Arguments = "+runscript `"$scriptPath`""
+                $processInfo.UseShellExecute = $false
+                $processInfo.RedirectStandardOutput = $true
+                $processInfo.RedirectStandardError = $true
+                $processInfo.CreateNoWindow = $true
 
-            while (-not $process.StandardOutput.EndOfStream) {
-                $line = $process.StandardOutput.ReadLine()
-                if ($line) { Write-Log $line }
-            }
+                $process = New-Object System.Diagnostics.Process
+                $process.StartInfo = $processInfo
+                $process.Start() | Out-Null
 
-            while (-not $process.StandardError.EndOfStream) {
-                $err = $process.StandardError.ReadLine()
-                if ($err) { Write-Log "[stderr] $err" }
-            }
+                while (-not $process.StandardOutput.EndOfStream) {
+                    $line = $process.StandardOutput.ReadLine()
+                    if ($line) {
+                        [System.Windows.Application]::Current.Dispatcher.Invoke([action] {
+                                if ($line -match "Downloading|Extracting|Verifying|Success|Update") {
+                                    Write-Log "[SteamCMD] $line"
+                                }
+                                else {
+                                    Write-Log $line
+                                }
+                            })
+                    }
+                }
 
-            $process.WaitForExit()
+                while (-not $process.StandardError.EndOfStream) {
+                    $err = $process.StandardError.ReadLine()
+                    if ($err) {
+                        [System.Windows.Application]::Current.Dispatcher.Invoke([action] {
+                                Write-Log "⚠️ [stderr] $err"
+                            })
+                    }
+                }
 
-            if ($process.ExitCode -eq 0) {
-                Write-Log "SCUM server installation complete."
-                $SCUMInstallStatus.Text = "Installed"
-                $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Green
-            }
-            else {
-                Write-Log "SteamCMD exited with code $($process.ExitCode)."
-                $SCUMInstallStatus.Text = "Failed"
-                $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Red
-            }
-        }
-        catch {
-            Write-Log "SCUM server installation failed: $_"
-            $SCUMInstallStatus.Text = "Failed"
-            $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Red
-        }
-        finally {
-            Remove-Item $scriptPath -ErrorAction SilentlyContinue
-            $SCUMPathPanel.Visibility = "Collapsed"
-            $SCUMInstallBtn.Content = "Install"
-        }
+                $process.WaitForExit()
 
+                [System.Windows.Application]::Current.Dispatcher.Invoke([action] {
+                        if ($process.ExitCode -eq 0) {
+                            Write-Log "✅ Installation completed successfully."
+                            $SCUMInstallStatus.Text = "Installed"
+                            $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Green
+                        }
+                        else {
+                            Write-Log "⚠️ SteamCMD exited with code $($process.ExitCode)."
+                            $SCUMInstallStatus.Text = "Failed"
+                            $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Red
+                        }
+
+                        Remove-Item $scriptPath -ErrorAction SilentlyContinue
+                        $SCUMPathPanel.Visibility = "Collapsed"
+                        $SCUMInstallBtn.Content = "Install"
+                    })
+
+            }).AddArgument($scriptPath).AddArgument($steamcmdPath).AddArgument($SCUMInstallStatus)
+
+        $null = $ps.BeginInvoke()
     })
 
 # SCUM Server Browse Button
@@ -895,6 +933,92 @@ $BrowseSCUMPathBtn.Add_Click({
             $SCUMPathBox.Text = $dialog.SelectedPath
         }
     })
+
+# SCUM Server Batch File Button
+$CreateBatchBtn.Add_Click({
+    $scumPath = $SCUMPathBox.Text
+    if ([string]::IsNullOrWhiteSpace($scumPath)) {
+        $scumPath = "C:\scumserver"
+        $SCUMPathBox.Text = $scumPath
+        Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
+    }
+
+    $port = $SCUMPortBox.Text
+    if ([string]::IsNullOrWhiteSpace($port) -or -not ($port -as [int])) {
+        $port = "7777"
+        $SCUMPortBox.Text = "7777"
+        Write-Log "⚠️ Using default port 7777."
+    }
+
+    $batDir = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64"
+    if (-not (Test-Path $batDir)) {
+        New-Item -Path $batDir -ItemType Directory -Force | Out-Null
+        Write-Log "📁 Created missing directory: $batDir"
+    }
+
+    $batPath = Join-Path -Path $batDir -ChildPath "startserver.bat"
+    $batContent = "start SCUMServer.exe -log -port=$port"
+
+    try {
+        Set-Content -Path $batPath -Value $batContent -Encoding ASCII
+        Write-Log "✅ Created startserver.bat at: $batPath"
+    } catch {
+        Write-Log "❌ Failed to create batch file: $_"
+    }
+})
+
+# SCUM Server Scheduled Task
+$CreateTaskBtn.Add_Click({
+    $scumPath = $SCUMPathBox.Text
+    if ([string]::IsNullOrWhiteSpace($scumPath)) {
+        $scumPath = "C:\scumserver"
+        $SCUMPathBox.Text = $scumPath
+        Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
+    }
+
+    $batPath = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64\startserver.bat"
+    if (-not (Test-Path $batPath)) {
+        Write-Log "❌ Batch file not found at expected location: $batPath"
+        Write-Log "👉 Please click 'Create startserver.bat' first."
+        return
+    }
+
+    $taskName = "SCUM AutoStart"
+    $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$batPath`""
+    $trigger = New-ScheduledTaskTrigger -AtStartup
+    $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest
+
+    try {
+        Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -Force
+        Write-Log "✅ Scheduled Task '$taskName' created successfully."
+    } catch {
+        Write-Log "❌ Failed to create Scheduled Task: $_"
+    }
+})
+
+# SCUM Start Server
+$StartSCUMServerBtn.Add_Click({
+    $scumPath = $SCUMPathBox.Text
+    if ([string]::IsNullOrWhiteSpace($scumPath)) {
+        $scumPath = "C:\scumserver"
+        $SCUMPathBox.Text = $scumPath
+        Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
+    }
+
+    $exePath = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64\SCUMServer.exe"
+    if (-not (Test-Path $exePath)) {
+        Write-Log "❌ SCUMServer.exe not found at: $exePath"
+        return
+    }
+
+    try {
+        Write-Log "🚀 Starting SCUM Server..."
+        Start-Process -FilePath $exePath -ArgumentList "-log" -WindowStyle Normal
+        Write-Log "✅ SCUM Server launched."
+    } catch {
+        Write-Log "❌ Failed to start SCUM Server: $_"
+    }
+})
 
 # SCUM Server Uninstall Button
 $SCUMUninstallBtn.Add_Click({
@@ -924,14 +1048,14 @@ $SCUMUninstallBtn.Add_Click({
         try {
             Write-Log "Uninstalling SCUM server files from: $installPath"
             Remove-Item -Path $installPath -Recurse -Force
-            Write-Log "SCUM server files removed successfully."
+            Write-Log "❌ SCUM server files removed successfully."
 
             # Update status label
             $SCUMInstallStatus.Text = "Not Installed"
             $SCUMInstallStatus.Foreground = [System.Windows.Media.Brushes]::Red
         }
         catch {
-            Write-Log "Failed to uninstall SCUM server: $_"
+            Write-Log "⚠️ Failed to uninstall SCUM server: $_"
         }
 
         # Refresh status and button states
