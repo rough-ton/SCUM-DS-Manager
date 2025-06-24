@@ -124,14 +124,23 @@ $xamlString = @"
                                     <TextBox Name="SCUMPortBox" Width="100" Text="7777"/>
                                 </StackPanel>
 
-                                <Button Name="CreateBatchBtn" Content="📝 Create startserver.bat" Width="250" Height="30" Margin="0,5"/>
-                                <Button Name="CreateTaskBtn" Content="🛠️ Create Auto-Start Scheduled Task" Width="250" Height="30" Margin="0,5"/>
-                                <Button Name="StartSCUMServerBtn" Content="▶️ Start SCUM Server" Width="250" Height="30" Margin="0,5">
-                                    <Button.Background>
-                                        <SolidColorBrush Color="LightGreen"/>
-                                    </Button.Background>
-                                </Button>
+                                <Button Name="CreateBatchBtn" Content="📝 Create startserver.bat" Width="250" Height="30" Margin="0,5" HorizontalAlignment="Center"/>
+                                <Button Name="CreateTaskBtn" Content="🛠️ Create Auto-Start Scheduled Task" Width="250" Height="30" Margin="0,5" HorizontalAlignment="Center"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,5" HorizontalAlignment="Center">
+                                    <Button Name="StartSCUMServerBtn" Content="▶️ Start SCUM Server" Width="170" Height="30" Margin="0,0,10,0">
+                                        <Button.Background>
+                                            <SolidColorBrush Color="LightGreen"/>
+                                        </Button.Background>
+                                    </Button>
+                                    <Button Name="StopSCUMServerBtn" Content="⏹️ Stop SCUM Server" Width="170" Height="30">
+                                        <Button.Background>
+                                            <SolidColorBrush Color="LightCoral"/>
+                                        </Button.Background>
+                                    </Button>
+                                </StackPanel>
                             </StackPanel>
+
                         </StackPanel>
                     </ScrollViewer>
 
@@ -278,6 +287,7 @@ $BrowseSCUMPathBtn = $window.FindName("BrowseSCUMPathBtn")
 $CreateBatchBtn = $window.FindName("CreateBatchBtn")
 $CreateTaskBtn = $window.FindName("CreateTaskBtn")
 $StartSCUMServerBtn = $window.FindName("StartSCUMServerBtn")
+$StopSCUMServerBtn = $window.FindName("StopSCUMServerBtn")
 
 $RunAllChecksBtn = $window.FindName("RunAllChecksBtn")
 $RunAllChecksBtn.Visibility = "Collapsed"
@@ -1017,6 +1027,22 @@ $StartSCUMServerBtn.Add_Click({
         Write-Log "✅ SCUM Server launched."
     } catch {
         Write-Log "❌ Failed to start SCUM Server: $_"
+    }
+})
+
+$StopSCUMServerBtn.Add_Click({
+    $process = Get-Process -Name "SCUMServer" -ErrorAction SilentlyContinue
+
+    if ($null -eq $process) {
+        Write-Log "ℹ️ No running SCUM Server process found."
+        return
+    }
+
+    try {
+        $process | Stop-Process -Force
+        Write-Log "🛑 SCUM Server process stopped."
+    } catch {
+        Write-Log "❌ Failed to stop SCUM Server: $_"
     }
 })
 
