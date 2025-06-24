@@ -56,7 +56,7 @@ $xamlString = @"
                 </Grid>
             </TabItem>
 
-            <TabItem Header="SCUM Server Install">
+            <TabItem Header="SCUM Server">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>     <!-- Main install content -->
