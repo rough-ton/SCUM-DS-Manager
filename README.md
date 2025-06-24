@@ -4,6 +4,16 @@
 
 ---
 
+## 📚 Table of Contents
+
+- [Features](#features)
+- [How to Run](#️how-to-run)
+- [Roadmap](#roadmap)
+- [License](#license)
+- [Support & Contributions](#support--contributions)
+
+---
+
 ## Features
 
 ### ✅ Hardware Requirements Check
