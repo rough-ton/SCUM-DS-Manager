@@ -7,7 +7,7 @@
 ## 📚 Table of Contents
 
 - [Features](#features)
-- [How to Run](#️how-to-run)
+- [How to Run](#how-to-run)
 - [Roadmap](#roadmap)
 - [License](#license)
 - [Support & Contributions](#support--contributions)
