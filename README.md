@@ -55,7 +55,7 @@
 - Runs with elevated privileges to manage installations
 
 ---
-
+<a name="how-to-run"></a>
 ## 🖥️ How to Run
 
 > **Requirements:**  
