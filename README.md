@@ -22,6 +22,8 @@
 - Visual feedback with green checkmarks or red flags
 - Includes warnings for unsupported OS environments
 
+  ![image](https://github.com/user-attachments/assets/c67e6597-d564-4fbb-90bb-9dfd8fa22f17)
+
 ### 📦 SCUM Server Setup
 - Guided installer for:
   - Visual C++ Redistributable (2015–2022 x64)
