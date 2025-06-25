@@ -17,11 +17,11 @@
 ## Features
 
 ### ✅ Hardware Requirements Check
+![image](https://github.com/user-attachments/assets/f33cd747-5491-4ccc-806a-55b1f7049c04)
 - Detects and displays system information: OS version, CPU, RAM, disk space
 - Validates minimum specs (4 logical cores, 16 GB RAM, 200 GB free disk space, Windows Server x64)
 - Visual feedback with green checkmarks or red flags
 - Includes warnings for unsupported OS environments
-![image](https://github.com/user-attachments/assets/f33cd747-5491-4ccc-806a-55b1f7049c04)
 
 ### 📦 SCUM Server Setup
 ![image](https://github.com/user-attachments/assets/8b56e682-0bac-484c-945e-acdce59dbc33)
