@@ -39,11 +39,11 @@
 
 
 ### ⚙️ SCUM Server Settings Editor
+![image](https://github.com/user-attachments/assets/e6de69b5-2436-4efe-9411-821548ffa7f2)
 - Edit the ServerSettings.ini
   - General, World, Respawn, Vehicles, Damage, Features are all dynamically pulled from the .ini file.
 - Backup the current config before making edits.
-![image](https://github.com/user-attachments/assets/e6de69b5-2436-4efe-9411-821548ffa7f2)
-![image](https://github.com/user-attachments/assets/4d0c58e3-cdc4-4ea3-8e0e-d68e0bd27cc6)
+![image](https://github.com/user-attachments/assets/3a25a442-a342-4871-8f49-e806644e1d0e)
 
 ### 🔒 Fully Offline, Transparent & Self-Contained
 - No telemetry. No webhooks. No funny business
