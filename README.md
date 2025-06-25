@@ -79,10 +79,8 @@
 
 ## License
 
-Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)  
-You may copy, modify, and share this tool, but commercial use is not allowed. Attribution required.
-
-[View License](https://creativecommons.org/licenses/by-nc/4.0/)
+- 📄 Code: MIT License
+- 📝 Documentation and assets: CC BY-NC 4.0
 
 ---
 
