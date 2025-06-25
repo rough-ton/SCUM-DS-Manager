@@ -17,7 +17,7 @@
 ## Features
 
 ### ✅ Hardware Requirements Check
-- Detects and displays system information: OS version, RAM, disk space
+- Detects and displays system information: OS version, CPU, RAM, disk space
 - Validates minimum specs (4 logical cores, 16 GB RAM, 200 GB free disk space, Windows Server x64)
 - Visual feedback with green checkmarks or red flags
 - Includes warnings for unsupported OS environments
@@ -28,16 +28,12 @@
   - Visual C++ Redistributable (2015–2022 x64)
   - DirectX End-User Runtime (June 2010)
   - SteamCMD (with configurable install path)
-  - SCUM Dedicated Server (via SteamCMD script)
-- Handles downloads, silent installs, and path validation
-- Install/uninstall support where applicable
+  - SCUM Server Files (via SteamCMD)
 ![image](https://github.com/user-attachments/assets/f6edc713-4073-428d-b10e-a7ef7e46a746)
 
 ### 🔒 Fully Offline, Transparent & Self-Contained
 - No telemetry. No webhooks. No funny business
 - Native PowerShell and XAML—easily auditable
-- Runs with elevated privileges to manage installations
-
 ---
 <a name="how-to-run"></a>
 ## 🖥️ How to Run
