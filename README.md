@@ -33,7 +33,9 @@
   - Auto-Start Scheduled Task to start the SCUM server when the OS boots
   - SCUM Server Auto-Restart task
     - You could generate multiple tasks if you wanted to restart once per day and every 4 hours.
-![image](https://github.com/user-attachments/assets/8b56e682-0bac-484c-945e-acdce59dbc33)
+      ![image](https://github.com/user-attachments/assets/4179cf22-e724-42aa-9af2-f594e3fd106c)
+
+
 
 ### ⚙️ SCUM Server Settings Editor
 - Edit the ServerSettings.ini
