@@ -165,9 +165,33 @@ $xamlString = @"
 
             <!-- Server Config Tab -->
             <TabItem Header="SCUM Server Settings">
-                <TextBlock TextWrapping="Wrap" Margin="10" FontSize="13" Text="Coming soon! SCUM Server config manager." />
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+            
+                    <!-- Scrollable Settings -->
+                    <ScrollViewer Grid.Row="0">
+                        <StackPanel Name="SettingsStackPanel">
+                            <Expander Header="General" Name="GeneralExpander" IsExpanded="True"/>
+                            <Expander Header="World" Name="WorldExpander"/>
+                            <Expander Header="Respawn" Name="RespawnExpander"/>
+                            <Expander Header="Vehicles" Name="VehiclesExpander"/>
+                            <Expander Header="Damage" Name="DamageExpander"/>
+                            <Expander Header="Features" Name="FeaturesExpander"/>
+                        </StackPanel>
+                    </ScrollViewer>
+            
+                    <!-- Buttons -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                        <Button Name="SaveSettingsBtn" Content="💾 Save" Width="100" Margin="5"/>
+                        <Button Name="RevertDefaultsBtn" Content="↩️ Revert to Default" Width="150" Margin="5"/>
+                        <Button Name="BackupConfigBtn" Content="📁 Backup Config" Width="150" Margin="5"/>
+                    </StackPanel>
+                </Grid>
             </TabItem>
-
+            
             <!-- About Tab -->
             <TabItem Header="About">
                 <Grid Margin="10">
