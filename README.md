@@ -70,6 +70,8 @@
 ## Roadmap
 
 - [ ] Server settings manager UI
+- [ ] Server updates
+- [ ] Scheduled server restarts
 - [ ] Network port validation
 - [ ] Backup and restore functionality
 
