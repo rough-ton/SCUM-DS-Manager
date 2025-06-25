@@ -418,19 +418,19 @@ function Load-HardwareInfo {
 
         if ($disk.DeviceID -eq $systemDrive) {
             $freeSpaceGB = $freeGB
-            if ($freeGB -ge 50) { $diskOk = $true }
+            if ($freeGB -ge 200) { $diskOk = $true }
         }
     }
 
     $isServer = $os.Caption -match "Windows Server"
     $is64 = $env:PROCESSOR_ARCHITECTURE -eq "AMD64"
     $osOk = $isServer -and $is64
-    $ramOk = $ramGB -ge 8
+    $ramOk = $ramGB -ge 16
 
     Set-CheckText $OSCheck "Operating System: $($os.Caption) ($env:PROCESSOR_ARCHITECTURE)" $osOk
-    Set-CheckText $RAMCheck "Memory: $ramGB GB detected (Minimum: 8 GB)" $ramOk
+    Set-CheckText $RAMCheck "Memory: $ramGB GB detected (Minimum: 16 GB)" $ramOk
     if ($null -ne $freeSpaceGB) {
-        Set-CheckText $DiskCheck "Disk Space (System Drive): $freeSpaceGB GB free (Minimum: 50 GB)" $diskOk
+        Set-CheckText $DiskCheck "Disk Space (System Drive): $freeSpaceGB GB free (Minimum: 200 GB)" $diskOk
     }
     else {
         Set-CheckText $DiskCheck "Disk Space: Unable to detect system drive" $false
@@ -441,8 +441,8 @@ function Load-HardwareInfo {
 
     if (-not $ramOk -or -not $diskOk) {
         $issues = @()
-        if (-not $ramOk) { $issues += "- At least 8GB RAM required." }
-        if (-not $diskOk) { $issues += "- At least 50GB free disk space required on system drive." }
+        if (-not $ramOk) { $issues += "- At least 16GB RAM required." }
+        if (-not $diskOk) { $issues += "- At least 200GB free disk space required on system drive." }
         $ErrorText.Text = $issues -join "`n"
         $ErrorBanner.Visibility = "Visible"
     }
