@@ -37,8 +37,8 @@ $xamlString = @"
                         <TextBlock Text="System Checks:" FontWeight="Bold" Margin="0,0,0,5"/>
                         <StackPanel Name="HardwareChecklist" Margin="0,0,0,10">
                             <TextBlock Name="OSCheck" FontWeight="Bold" ToolTip="Requires a 64-bit Windows Server OS"/>
-                            <TextBlock Name="RAMCheck" FontWeight="Bold" ToolTip="Minimum: 8 GB RAM required"/>
-                            <TextBlock Name="DiskCheck" FontWeight="Bold" ToolTip="Minimum: 50 GB disk space required"/>
+                            <TextBlock Name="RAMCheck" FontWeight="Bold" ToolTip="Minimum: 16 GB RAM required"/>
+                            <TextBlock Name="DiskCheck" FontWeight="Bold" ToolTip="Minimum: 200 GB disk space required"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -188,7 +188,7 @@ $xamlString = @"
 
                             <TextBlock Text="License:" FontWeight="Bold" FontSize="13" Margin="0,10,0,2"/>
                             <TextBlock TextWrapping="Wrap" FontSize="12" Margin="0,0,0,5"
-                                    Text="This tool is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) license. You are free to copy, modify, and share it, but commercial use is not permitted. You must provide attribution." />
+                                    Text="This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). You’re free to use, modify, and share this code for personal or non-commercial purposes. Commercial use is not allowed without prior written permission. Interested in commercial use? Contact me to discuss licensing options." />
 
                             <TextBlock Name="LicenseLink" Text="View License: https://creativecommons.org/licenses/by-nc/4.0/"
                                     FontSize="12" Foreground="Blue" Cursor="Hand" Margin="0,5,0,5" TextDecorations="Underline"/>
