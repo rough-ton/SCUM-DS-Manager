@@ -293,7 +293,6 @@ $StartSCUMServerBtn = $window.FindName("StartSCUMServerBtn")
 $StopSCUMServerBtn = $window.FindName("StopSCUMServerBtn")
 
 $RunAllChecksBtn = $window.FindName("RunAllChecksBtn")
-$RunAllChecksBtn.Visibility = "Collapsed"
 
 $OutputLog = $window.FindName("OutputLog")
 
