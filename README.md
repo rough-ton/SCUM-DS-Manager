@@ -24,6 +24,7 @@
 ![image](https://github.com/user-attachments/assets/f33cd747-5491-4ccc-806a-55b1f7049c04)
 
 ### 📦 SCUM Server Setup
+![image](https://github.com/user-attachments/assets/8b56e682-0bac-484c-945e-acdce59dbc33)
 - Guided installer for:
   - Visual C++ Redistributable (2015–2022 x64)
   - DirectX End-User Runtime (June 2010)
