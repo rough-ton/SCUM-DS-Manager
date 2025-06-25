@@ -1,4 +1,4 @@
-if ($host.Name -eq 'ConsoleHost' -and -not $env:SCUM_GUI_RELAUNCHED) {
+ if ($host.Name -eq 'ConsoleHost' -and -not $env:SCUM_GUI_RELAUNCHED) {
     $env:SCUM_GUI_RELAUNCHED = "1"
     Start-Process powershell -ArgumentList "-WindowStyle Hidden -ExecutionPolicy Bypass -NoProfile -File `"$PSCommandPath`"" -WindowStyle Hidden
     exit
@@ -1136,4 +1136,4 @@ $window.ShowDialog() | Out-Null
 # Restore console output after window is closed
 $window.Closed += {
     [Console]::SetOut($originalOutput)
-}
+} 
