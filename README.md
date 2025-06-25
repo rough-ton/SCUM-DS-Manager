@@ -31,7 +31,8 @@
   - SCUM Server Files (via SteamCMD)
   - startserver.bat generation with custom port
   - Auto-Start Scheduled Task to start the SCUM server when the OS boots
-  - SCUM Server Auto-Restart task. 
+  - SCUM Server Auto-Restart task
+    - You could generate multiple tasks if you wanted to restart once per day and every 4 hours.
 ![image](https://github.com/user-attachments/assets/8b56e682-0bac-484c-945e-acdce59dbc33)
 
 ### ⚙️ SCUM Server Settings Editor
