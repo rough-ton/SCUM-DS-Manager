@@ -77,10 +77,13 @@
 
 ---
 
-## License
+## 📄 License
 
-- 📄 Code: MIT License
-- 📝 Documentation and assets: CC BY-NC 4.0
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).
+
+You’re free to use, modify, and share this code for personal or non-commercial purposes. Commercial use is **not allowed** without prior written permission.
+
+*** Interested in commercial use? Contact me to discuss licensing options.
 
 ---
 
