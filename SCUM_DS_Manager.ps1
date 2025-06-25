@@ -1,8 +1,8 @@
- if ($host.Name -eq 'ConsoleHost' -and -not $env:SCUM_GUI_RELAUNCHED) {
-    $env:SCUM_GUI_RELAUNCHED = "1"
-    Start-Process powershell -ArgumentList "-WindowStyle Hidden -ExecutionPolicy Bypass -NoProfile -File `"$PSCommandPath`"" -WindowStyle Hidden
-    exit
-}
+# if ($host.Name -eq 'ConsoleHost' -and -not $env:SCUM_GUI_RELAUNCHED) {
+#    $env:SCUM_GUI_RELAUNCHED = "1"
+#    Start-Process powershell -ArgumentList "-WindowStyle Hidden -ExecutionPolicy Bypass -NoProfile -File `"$PSCommandPath`"" -WindowStyle Hidden
+#    exit
+#}
 
 Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName PresentationCore
@@ -139,6 +139,13 @@ $xamlString = @"
                                         </Button.Background>
                                     </Button>
                                 </StackPanel>
+                                <TextBlock TextWrapping="Wrap"
+                                    Margin="5,2,5,10"
+                                    FontSize="12"
+                                    Foreground="DarkGray"
+                                    HorizontalAlignment="Center"
+                                    TextAlignment="Center"
+                                    Text="Start the SCUM Server to generate the other server files and ServerSettings.ini file." />
                             </StackPanel>
 
                         </StackPanel>
@@ -150,11 +157,6 @@ $xamlString = @"
                             <Button Name="RunAllChecksBtn" Content="Run Checks" Width="120"/>
                         </StackPanel>
 
-                        <Expander Header="Show Log Output" IsExpanded="False" Margin="0,0,0,5">
-                            <TextBox Name="OutputLog" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap"
-                                    FontFamily="Consolas" FontSize="12" VerticalScrollBarVisibility="Auto" Height="100"/>
-                        </Expander>
-
                         <Border Background="#FFF5F5" Padding="5" Margin="0,5,0,0">
                             <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="Red" FontStyle="Italic"
                                     Text="Disclaimer: This tool (and the scripts within) is provided as-is, with zero warranty, guarantees, or promises. If it breaks something, deletes your stuff, or summons a tech demon, that’s on you." />
@@ -163,32 +165,58 @@ $xamlString = @"
                 </Grid>
             </TabItem>
 
-            <!-- Server Config Tab -->
             <TabItem Header="SCUM Server Settings">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>     <!-- Scrollable settings -->
+                        <RowDefinition Height="Auto"/>  <!-- Buttons -->
+                        <RowDefinition Height="Auto"/>  <!-- Disclaimer -->
                     </Grid.RowDefinitions>
-            
+
                     <!-- Scrollable Settings -->
                     <ScrollViewer Grid.Row="0">
                         <StackPanel Name="SettingsStackPanel">
-                            <Expander Header="General" Name="GeneralExpander" IsExpanded="True"/>
-                            <Expander Header="World" Name="WorldExpander"/>
-                            <Expander Header="Respawn" Name="RespawnExpander"/>
-                            <Expander Header="Vehicles" Name="VehiclesExpander"/>
-                            <Expander Header="Damage" Name="DamageExpander"/>
-                            <Expander Header="Features" Name="FeaturesExpander"/>
+                            <Expander Header="General" Name="GeneralExpander" IsExpanded="True">
+                                <StackPanel />
+                            </Expander>
+                            <Expander Header="World" Name="WorldExpander">
+                                <StackPanel />
+                            </Expander>
+                            <Expander Header="Respawn" Name="RespawnExpander">
+                                <StackPanel />
+                            </Expander>
+                            <Expander Header="Vehicles" Name="VehiclesExpander">
+                                <StackPanel />
+                            </Expander>
+                            <Expander Header="Damage" Name="DamageExpander">
+                                <StackPanel />
+                            </Expander>
+                            <Expander Header="Features" Name="FeaturesExpander">
+                                <StackPanel />
+                            </Expander>
                         </StackPanel>
                     </ScrollViewer>
-            
-                    <!-- Buttons -->
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
-                        <Button Name="SaveSettingsBtn" Content="💾 Save" Width="100" Margin="5"/>
-                        <Button Name="RevertDefaultsBtn" Content="↩️ Revert to Default" Width="150" Margin="5"/>
-                        <Button Name="BackupConfigBtn" Content="📁 Backup Config" Width="150" Margin="5"/>
+
+                    <!-- Buttons + Reminder Message -->
+                    <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Name="SaveSettingsBtn" Content="💾 Save" Margin="5" MinWidth="100"/>
+                            <Button Name="BackupConfigBtn" Content="📁 Backup Config" Width="150" Margin="5"/>
+                        </StackPanel>
+                        <TextBlock TextWrapping="Wrap"
+                                Margin="5,10,5,0"
+                                FontSize="12"
+                                Foreground="DarkGray"
+                                HorizontalAlignment="Center"
+                                TextAlignment="Center"
+                                Text="Remember to restart the SCUM server after saving changes to this file." />
                     </StackPanel>
+
+                    <!-- Disclaimer pinned to bottom -->
+                    <Border Grid.Row="2" Background="#FFF5F5" Padding="5" Margin="0,5,0,0">
+                        <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="Red" FontStyle="Italic"
+                                Text="Disclaimer: This tool (and the scripts within) is provided as-is, with zero warranty, guarantees, or promises. If it breaks something, deletes your stuff, or summons a tech demon, that’s on you." />
+                    </Border>
                 </Grid>
             </TabItem>
             
@@ -238,6 +266,21 @@ $xamlString = @"
                 </Grid>
             </TabItem>
 
+            <!-- Log Tab -->
+            <TabItem Header="Log Output">
+                <Grid Margin="10">
+                    <Expander Header="Show Log Output" IsExpanded="True">
+                        <TextBox Name="OutputLog"
+                                IsReadOnly="True"
+                                AcceptsReturn="True"
+                                TextWrapping="Wrap"
+                                FontFamily="Consolas"
+                                FontSize="12"
+                                VerticalScrollBarVisibility="Auto"
+                                Height="500"/>
+                    </Expander>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
@@ -248,8 +291,18 @@ $xamlString = @"
 #########################################
 Add-Type -AssemblyName PresentationFramework
 
-$reader = [System.Xml.XmlReader]::Create([System.IO.StringReader]::new($xamlString))
-$window = [Windows.Markup.XamlReader]::Load($reader)
+try {
+    $reader = [System.Xml.XmlReader]::Create([System.IO.StringReader]::new($xamlString))
+    $window = [Windows.Markup.XamlReader]::Load($reader)
+}
+catch {
+    Write-Host "❌ ERROR: XAML failed to load!" -ForegroundColor Red
+    Write-Host $_.Exception.GetType().FullName
+    Write-Host $_.Exception.Message
+    pause
+    exit
+}
+
 
 ################################################################
 ########## Redirect all default output to the GUI log ##########
@@ -316,6 +369,15 @@ $CreateTaskBtn = $window.FindName("CreateTaskBtn")
 $StartSCUMServerBtn = $window.FindName("StartSCUMServerBtn")
 $StopSCUMServerBtn = $window.FindName("StopSCUMServerBtn")
 
+$GeneralExpander = $window.FindName("GeneralExpander")
+$WorldExpander = $window.FindName("WorldExpander")
+$RespawnExpander = $window.FindName("RespawnExpander")
+$VehiclesExpander = $window.FindName("VehiclesExpander")
+$DamageExpander = $window.FindName("DamageExpander")
+$FeaturesExpander = $window.FindName("FeaturesExpander")
+$SaveSettingsBtn = $window.FindName("SaveSettingsBtn")
+$BackupConfigBtn = $window.FindName("BackupConfigBtn")
+
 $RunAllChecksBtn = $window.FindName("RunAllChecksBtn")
 
 $OutputLog = $window.FindName("OutputLog")
@@ -331,6 +393,13 @@ $MainTab.Add_SelectionChanged({
             $window.Dispatcher.InvokeAsync({
                     $RunAllChecksBtn.RaiseEvent([System.Windows.RoutedEventArgs]::new([System.Windows.Controls.Button]::ClickEvent))
                     $ChecksAlreadyRan = $true
+                }, [System.Windows.Threading.DispatcherPriority]::ApplicationIdle)
+        }
+
+        if ($selectedTab.Header -eq "SCUM Server Settings") {
+            # Load settings when the tab is selected
+            $window.Dispatcher.InvokeAsync({
+                    Load-ServerSettings
                 }, [System.Windows.Threading.DispatcherPriority]::ApplicationIdle)
         }
     })
@@ -972,105 +1041,109 @@ $BrowseSCUMPathBtn.Add_Click({
 
 # SCUM Server Batch File Button
 $CreateBatchBtn.Add_Click({
-    $scumPath = $SCUMPathBox.Text
-    if ([string]::IsNullOrWhiteSpace($scumPath)) {
-        $scumPath = "C:\scumserver"
-        $SCUMPathBox.Text = $scumPath
-        Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
-    }
+        $scumPath = $SCUMPathBox.Text
+        if ([string]::IsNullOrWhiteSpace($scumPath)) {
+            $scumPath = "C:\scumserver"
+            $SCUMPathBox.Text = $scumPath
+            Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
+        }
 
-    $port = $SCUMPortBox.Text
-    if ([string]::IsNullOrWhiteSpace($port) -or -not ($port -as [int])) {
-        $port = "7777"
-        $SCUMPortBox.Text = "7777"
-        Write-Log "⚠️ Using default port 7777."
-    }
+        $port = $SCUMPortBox.Text
+        if ([string]::IsNullOrWhiteSpace($port) -or -not ($port -as [int])) {
+            $port = "7777"
+            $SCUMPortBox.Text = "7777"
+            Write-Log "⚠️ Using default port 7777."
+        }
 
-    $batDir = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64"
-    if (-not (Test-Path $batDir)) {
-        New-Item -Path $batDir -ItemType Directory -Force | Out-Null
-        Write-Log "📁 Created missing directory: $batDir"
-    }
+        $batDir = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64"
+        if (-not (Test-Path $batDir)) {
+            New-Item -Path $batDir -ItemType Directory -Force | Out-Null
+            Write-Log "📁 Created missing directory: $batDir"
+        }
 
-    $batPath = Join-Path -Path $batDir -ChildPath "startserver.bat"
-    $batContent = "start SCUMServer.exe -log -port=$port"
+        $batPath = Join-Path -Path $batDir -ChildPath "startserver.bat"
+        $batContent = "start SCUMServer.exe -log -port=$port"
 
-    try {
-        Set-Content -Path $batPath -Value $batContent -Encoding ASCII
-        Write-Log "✅ Created startserver.bat at: $batPath"
-    } catch {
-        Write-Log "❌ Failed to create batch file: $_"
-    }
-})
+        try {
+            Set-Content -Path $batPath -Value $batContent -Encoding ASCII
+            Write-Log "✅ Created startserver.bat at: $batPath"
+        }
+        catch {
+            Write-Log "❌ Failed to create batch file: $_"
+        }
+    })
 
 # SCUM Server Scheduled Task
 $CreateTaskBtn.Add_Click({
-    $scumPath = $SCUMPathBox.Text
-    if ([string]::IsNullOrWhiteSpace($scumPath)) {
-        $scumPath = "C:\scumserver"
-        $SCUMPathBox.Text = $scumPath
-        Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
-    }
+        $scumPath = $SCUMPathBox.Text
+        if ([string]::IsNullOrWhiteSpace($scumPath)) {
+            $scumPath = "C:\scumserver"
+            $SCUMPathBox.Text = $scumPath
+            Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
+        }
 
-    $batPath = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64\startserver.bat"
-    if (-not (Test-Path $batPath)) {
-        Write-Log "❌ Batch file not found at expected location: $batPath"
-        Write-Log "👉 Please click 'Create startserver.bat' first."
-        return
-    }
+        $batPath = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64\startserver.bat"
+        if (-not (Test-Path $batPath)) {
+            Write-Log "❌ Batch file not found at expected location: $batPath"
+            Write-Log "👉 Please click 'Create startserver.bat' first."
+            return
+        }
 
-    $taskName = "SCUM AutoStart"
-    $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$batPath`""
-    $trigger = New-ScheduledTaskTrigger -AtStartup
-    $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest
+        $taskName = "SCUM AutoStart"
+        $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$batPath`""
+        $trigger = New-ScheduledTaskTrigger -AtStartup
+        $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest
 
-    try {
-        Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -Force
-        Write-Log "✅ Scheduled Task '$taskName' created successfully."
-    } catch {
-        Write-Log "❌ Failed to create Scheduled Task: $_"
-    }
-})
+        try {
+            Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Principal $principal -Force
+            Write-Log "✅ Scheduled Task '$taskName' created successfully."
+        }
+        catch {
+            Write-Log "❌ Failed to create Scheduled Task: $_"
+        }
+    })
 
 # SCUM Start Server
 $StartSCUMServerBtn.Add_Click({
-    $scumPath = $SCUMPathBox.Text
-    if ([string]::IsNullOrWhiteSpace($scumPath)) {
-        $scumPath = "C:\scumserver"
-        $SCUMPathBox.Text = $scumPath
-        Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
-    }
+        $scumPath = $SCUMPathBox.Text
+        if ([string]::IsNullOrWhiteSpace($scumPath)) {
+            $scumPath = "C:\scumserver"
+            $SCUMPathBox.Text = $scumPath
+            Write-Log "ℹ️ No SCUM install path provided. Defaulting to: $scumPath"
+        }
 
-    $exePath = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64\SCUMServer.exe"
-    if (-not (Test-Path $exePath)) {
-        Write-Log "❌ SCUMServer.exe not found at: $exePath"
-        return
-    }
+        $exePath = Join-Path -Path $scumPath -ChildPath "SCUM\Binaries\Win64\SCUMServer.exe"
+        if (-not (Test-Path $exePath)) {
+            Write-Log "❌ SCUMServer.exe not found at: $exePath"
+            return
+        }
 
-    try {
-        Write-Log "🚀 Starting SCUM Server..."
-        Start-Process -FilePath $exePath -ArgumentList "-log" -WindowStyle Normal
-        Write-Log "✅ SCUM Server launched."
-    } catch {
-        Write-Log "❌ Failed to start SCUM Server: $_"
-    }
-})
+        try {
+            Write-Log "🚀 Starting SCUM Server..."
+            Start-Process -FilePath $exePath -ArgumentList "-log" -WindowStyle Normal
+            Write-Log "✅ SCUM Server launched."
+        }
+        catch {
+            Write-Log "❌ Failed to start SCUM Server: $_"
+        }
+    })
 
 $StopSCUMServerBtn.Add_Click({
-    $process = Get-Process -Name "SCUMServer" -ErrorAction SilentlyContinue
+        $process = Get-Process -Name "SCUMServer" -ErrorAction SilentlyContinue
 
-    if ($null -eq $process) {
-        Write-Log "ℹ️ No running SCUM Server process found."
-        return
-    }
+        if ($null -eq $process) {
+            Write-Log "ℹ️ No running SCUM Server process found."
+            return
+        }
 
-    try {
-        $process | Stop-Process -Force
-        Write-Log "🛑 SCUM Server process stopped."
-    } catch {
-        Write-Log "❌ Failed to stop SCUM Server: $_"
-    }
-})
+        try {
+            $process | Stop-Process -Force
+            Write-Log "🛑 SCUM Server process stopped."
+        }
+        catch {
+            Write-Log "❌ Failed to stop SCUM Server: $_"
+        }
+    })
 
 # SCUM Server Uninstall Button
 $SCUMUninstallBtn.Add_Click({
@@ -1116,6 +1189,222 @@ $SCUMUninstallBtn.Add_Click({
         $SCUMInstallBtn.IsEnabled = (-not $scumInstalled -and $steamInstalled)
         $SCUMUninstallBtn.IsEnabled = $scumInstalled
     })
+
+#####################################
+########## Server Settings ##########
+#####################################
+
+# Load Server Settings
+function Load-ServerSettings {
+    $settingsFile = "C:\scumserver\SCUM\Saved\Config\WindowsServer\ServerSettings.ini"
+
+    if (-not (Test-Path $settingsFile)) {
+        Write-Log "⚠️ ServerSettings.ini not found at: $settingsFile"
+        return
+    }
+
+    Write-Log "📖 Loading server settings from: $settingsFile"
+
+    $currentSection = ""
+    $settingsBySection = @{}
+
+    Get-Content $settingsFile | ForEach-Object {
+        $line = $_.Trim()
+        if ($line -match '^\[(.+)\]$') {
+            $currentSection = $matches[1]
+            if (-not $settingsBySection.ContainsKey($currentSection)) {
+                $settingsBySection[$currentSection] = New-Object 'System.Collections.Specialized.OrderedDictionary'
+            }
+        }
+        elseif ($line -match '^(.*?)=(.*)$' -and $currentSection) {
+            $key = $matches[1].Trim()
+            $val = $matches[2].Trim()
+            $settingsBySection[$currentSection].Add($key, $val)
+        }
+    }
+
+    # Map INI sections to Expander controls
+    $expanderMap = @{
+        "General"  = $window.FindName("GeneralExpander")
+        "World"    = $window.FindName("WorldExpander")
+        "Respawn"  = $window.FindName("RespawnExpander")
+        "Vehicles" = $window.FindName("VehiclesExpander")
+        "Damage"   = $window.FindName("DamageExpander")
+        "Features" = $window.FindName("FeaturesExpander")
+    }
+
+    foreach ($section in $expanderMap.Keys) {
+        $expander = $expanderMap[$section]
+        if (-not $expander) { continue }
+
+        $stack = New-Object System.Windows.Controls.StackPanel
+        $stack.Margin = "5"
+
+        if ($settingsBySection.ContainsKey($section)) {
+            foreach ($key in $settingsBySection[$section].Keys) {
+                $val = $settingsBySection[$section][$key]
+
+                # Row container using Grid
+                $row = New-Object System.Windows.Controls.Grid
+                $row.Margin = "0,2"
+
+                # Define two columns: fixed width for label, remaining for textbox
+                $labelCol = New-Object System.Windows.Controls.ColumnDefinition
+                $labelCol.Width = [Windows.GridLength]::new(450)
+
+                $inputCol = New-Object System.Windows.Controls.ColumnDefinition
+                $inputCol.Width = [Windows.GridLength]::new(1, [Windows.GridUnitType]::Star)
+
+                $row.ColumnDefinitions.Add($labelCol)
+                $row.ColumnDefinitions.Add($inputCol)
+
+                # Label
+                $label = New-Object System.Windows.Controls.TextBlock
+                $label.Text = [System.Security.SecurityElement]::Escape("${key}:")
+                $label.VerticalAlignment = "Center"
+                [System.Windows.Controls.Grid]::SetColumn($label, 0)
+
+                # Input box
+                $input = New-Object System.Windows.Controls.TextBox
+                $input.Text = $val
+                $input.Tag = "$section|$key"
+                $input.VerticalAlignment = "Center"
+                $input.Margin = "10,0,0,0"
+                [System.Windows.Controls.Grid]::SetColumn($input, 1)
+
+                # Add controls to row
+                $row.Children.Add($label)
+                $row.Children.Add($input)
+
+                # Add row to section stack
+                $stack.Children.Add($row)
+            }
+        }
+        else {
+            $emptyNote = New-Object System.Windows.Controls.TextBlock
+            $emptyNote.Text = "No settings found in this section."
+            $stack.Children.Add($emptyNote)
+        }
+
+        $expander.Content = $stack
+    }
+
+    Write-Log "✅ Server settings loaded successfully."
+}
+
+# Server Save Button
+$SaveSettingsBtn.Add_Click({
+        if ($SaveSettingsBtn.Content -eq "💾 Save") {
+            $SaveSettingsBtn.Content = "✅ Confirm Save"
+            Write-Log "Click again to confirm saving server settings to the .ini file."
+            return
+        }
+
+        $SaveSettingsBtn.Content = "💾 Save"
+        Write-Log "💾 Saving updated server settings..."
+
+        $settingsFile = "C:\scumserver\SCUM\Saved\Config\WindowsServer\ServerSettings.ini"
+
+        # Map expanders
+        $expanderMap = @{
+            "General"  = $window.FindName("GeneralExpander")
+            "World"    = $window.FindName("WorldExpander")
+            "Respawn"  = $window.FindName("RespawnExpander")
+            "Vehicles" = $window.FindName("VehiclesExpander")
+            "Damage"   = $window.FindName("DamageExpander")
+            "Features" = $window.FindName("FeaturesExpander")
+        }
+
+        # Step 1: Collect updated settings from UI
+        $updatedSettings = @{}
+
+        foreach ($section in $expanderMap.Keys) {
+            $expander = $expanderMap[$section]
+            if (-not $expander) { continue }
+
+            $stack = $expander.Content
+            if (-not $stack) { continue }
+
+            foreach ($row in $stack.Children) {
+                foreach ($child in $row.Children) {
+                    if ($child -is [System.Windows.Controls.TextBox] -and $child.Tag -match '(.+)\|(.+)') {
+                        $tagSection = $matches[1]
+                        $tagKey = $matches[2]
+                        $tagValue = $child.Text.Trim()
+                        $updatedSettings["$tagSection|$tagKey"] = $tagValue
+                    }
+                }
+            }
+        }
+
+        # Step 2: Rebuild the file line-by-line, preserving original structure
+        $outputLines = @()
+        $currentSection = ""
+
+        Get-Content $settingsFile | ForEach-Object {
+            $line = $_
+            $trimmed = $line.Trim()
+
+            if ($trimmed -match '^\[(.+?)\]$') {
+                $currentSection = $matches[1]
+                $outputLines += $line
+            }
+            elseif ($trimmed -match '^([^=]+)=(.*)$' -and $currentSection) {
+                $key = $matches[1].Trim()
+                $lookup = "$currentSection|$key"
+
+                if ($updatedSettings.ContainsKey($lookup)) {
+                    $newValue = $updatedSettings[$lookup]
+                    $outputLines += "$key=$newValue"
+                }
+                else {
+                    $outputLines += $line
+                }
+            }
+            else {
+                # Preserve blank lines, comments, and unknown formats
+                $outputLines += $line
+            }
+        }
+
+        if ($outputLines.Count -eq 0) {
+            Write-Log "❌ No lines were collected. Aborting write to avoid data loss."
+            return
+        }
+
+        try {
+            Set-Content -Path $settingsFile -Value $outputLines -Encoding UTF8
+            Write-Log "✅ ServerSettings.ini saved successfully (preserved structure)."
+        }
+        catch {
+            Write-Log "❌ Failed to save ServerSettings.ini: $_"
+            [System.Windows.MessageBox]::Show("Failed to save settings.`n`n$_", "Error", "OK", "Error")
+        }
+    })
+
+# Server Settings Backup Button
+$BackupConfigBtn.Add_Click({
+    $settingsFile = "C:\scumserver\SCUM\Saved\Config\WindowsServer\ServerSettings.ini"
+
+    if (-not (Test-Path $settingsFile)) {
+        Write-Log "❌ Cannot back up. File not found: $settingsFile"
+        [System.Windows.MessageBox]::Show("ServerSettings.ini not found. Cannot create backup.", "Error", "OK", "Error")
+        return
+    }
+
+    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $backupPath = Join-Path -Path (Split-Path $settingsFile -Parent) -ChildPath ("ServerSettings_$timestamp.BAK")
+
+    try {
+        Copy-Item -Path $settingsFile -Destination $backupPath -Force
+        Write-Log "📁 Backup created: $backupPath"
+        [System.Windows.MessageBox]::Show("Backup created successfully:`n$backupPath", "Backup Complete", "OK", "Info")
+    }
+    catch {
+        Write-Log "❌ Failed to back up ServerSettings.ini: $_"
+        [System.Windows.MessageBox]::Show("Failed to create backup.`n`n$_", "Error", "OK", "Error")
+    }
+})
 
 ####################################
 ########## Run All Checks ##########
