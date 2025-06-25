@@ -38,7 +38,7 @@ $xamlString = @"
                         <StackPanel Name="HardwareChecklist" Margin="0,0,0,10">
                             <TextBlock Name="OSCheck" FontWeight="Bold" ToolTip="Requires a 64-bit Windows Server OS"/>
                             <TextBlock Name="RAMCheck" FontWeight="Bold" ToolTip="Minimum: 16 GB RAM required"/>
-                            <TextBlock Name="DiskCheck" FontWeight="Bold" ToolTip="Minimum: 200 GB disk space required"/>
+                            <TextBlock Name="DiskCheck" FontWeight="Bold" ToolTip="Minimum: 100 GB disk space required"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -418,7 +418,7 @@ function Load-HardwareInfo {
 
         if ($disk.DeviceID -eq $systemDrive) {
             $freeSpaceGB = $freeGB
-            if ($freeGB -ge 200) { $diskOk = $true }
+            if ($freeGB -ge 100) { $diskOk = $true }
         }
     }
 
@@ -430,7 +430,7 @@ function Load-HardwareInfo {
     Set-CheckText $OSCheck "Operating System: $($os.Caption) ($env:PROCESSOR_ARCHITECTURE)" $osOk
     Set-CheckText $RAMCheck "Memory: $ramGB GB detected (Minimum: 16 GB)" $ramOk
     if ($null -ne $freeSpaceGB) {
-        Set-CheckText $DiskCheck "Disk Space (System Drive): $freeSpaceGB GB free (Minimum: 200 GB)" $diskOk
+        Set-CheckText $DiskCheck "Disk Space (System Drive): $freeSpaceGB GB free (Minimum: 100 GB)" $diskOk
     }
     else {
         Set-CheckText $DiskCheck "Disk Space: Unable to detect system drive" $false
@@ -442,7 +442,7 @@ function Load-HardwareInfo {
     if (-not $ramOk -or -not $diskOk) {
         $issues = @()
         if (-not $ramOk) { $issues += "- At least 16GB RAM required." }
-        if (-not $diskOk) { $issues += "- At least 200GB free disk space required on system drive." }
+        if (-not $diskOk) { $issues += "- At least 100GB free disk space required on system drive." }
         $ErrorText.Text = $issues -join "`n"
         $ErrorBanner.Visibility = "Visible"
     }
