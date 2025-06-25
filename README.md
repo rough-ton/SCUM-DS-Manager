@@ -21,7 +21,7 @@
 - Validates minimum specs (4 logical cores, 16 GB RAM, 200 GB free disk space, Windows Server x64)
 - Visual feedback with green checkmarks or red flags
 - Includes warnings for unsupported OS environments
-![image](https://github.com/user-attachments/assets/30eced64-55d2-4a34-9052-a7015c95891a)
+![image](https://github.com/user-attachments/assets/f33cd747-5491-4ccc-806a-55b1f7049c04)
 
 ### 📦 SCUM Server Setup
 - Guided installer for:
@@ -29,7 +29,17 @@
   - DirectX End-User Runtime (June 2010)
   - SteamCMD (with configurable install path)
   - SCUM Server Files (via SteamCMD)
-![image](https://github.com/user-attachments/assets/f6edc713-4073-428d-b10e-a7ef7e46a746)
+  - startserver.bat generation with custom port
+  - Auto-Start Scheduled Task to start the SCUM server when the OS boots
+  - SCUM Server Auto-Restart task. 
+![image](https://github.com/user-attachments/assets/8b56e682-0bac-484c-945e-acdce59dbc33)
+
+### ⚙️ SCUM Server Settings Editor
+- Edit the ServerSettings.ini
+  - General, World, Respawn, Vehicles, Damage, Features are all dynamically pulled from the .ini file.
+- Backup the current config before making edits.
+![image](https://github.com/user-attachments/assets/e6de69b5-2436-4efe-9411-821548ffa7f2)
+![image](https://github.com/user-attachments/assets/4d0c58e3-cdc4-4ea3-8e0e-d68e0bd27cc6)
 
 ### 🔒 Fully Offline, Transparent & Self-Contained
 - No telemetry. No webhooks. No funny business
