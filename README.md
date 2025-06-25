@@ -79,11 +79,9 @@
 
 ## Roadmap
 
-- [ ] Server settings manager UI
-- [ ] Server updates
-- [ ] Scheduled server restarts
+- [ ] SCUM Server updates
 - [ ] Network port validation
-- [ ] Backup and restore functionality
+- [ ] Containerized SCUM Server!
 
 ---
 
