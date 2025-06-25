@@ -18,7 +18,7 @@
 
 ### ✅ Hardware Requirements Check
 - Detects and displays system information: OS version, RAM, disk space
-- Validates minimum specs (8 GB RAM, 50 GB free disk space, Windows Server x64)
+- Validates minimum specs (4 logical cores, 16 GB RAM, 200 GB free disk space, Windows Server x64)
 - Visual feedback with green checkmarks or red flags
 - Includes warnings for unsupported OS environments
 ![image](https://github.com/user-attachments/assets/30eced64-55d2-4a34-9052-a7015c95891a)
