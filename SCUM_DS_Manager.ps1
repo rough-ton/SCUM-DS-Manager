@@ -181,7 +181,7 @@ $xamlString = @"
                         <StackPanel>
                             <TextBlock Text="SCUM DS (Dedicated Server) Manager" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
                             <TextBlock Text="Version: 1.0.0" FontSize="12" Margin="0,0,0,5"/>
-                            <TextBlock Text="Developed by: Mike Roughton" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBlock Text="Developed by: Michael Roughton" FontSize="12" Margin="0,0,0,5"/>
 
                             <TextBlock TextWrapping="Wrap" FontSize="12" Margin="0,10,0,5"
                                     Text="This tool was built using native PowerShell to be fully transparent and easily auditable. All functions are visible in plain text, and nothing in this tool communicates externally or 'phones home'." />
